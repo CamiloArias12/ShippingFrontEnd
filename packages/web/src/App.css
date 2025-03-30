@@ -1,0 +1,108 @@
+@font-face {
+  font-family: 'LatoRegular';
+  src: url('/font/Lato-Regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'LatoLight';
+  src: url('/font/Lato-Light.ttf') format('truetype');
+}
+:root {
+  --primary-color: #009ee3;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-sizing: border-box;
+  font-family: 'LatoRegular';
+  vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+
+body {
+  line-height: 1;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+.center {
+  text-align: center;
+}
+
+/******************************************/
+/***************** Step 1 *****************/
+/******************************************/
+
+.button-input {
+  display: flex;
+  align-items: center;
+  height: 45px;
+  border: 1px solid rgba(173, 173, 173, 0.6);
+  background-color: rgb(255, 255, 255);
+}
+.button-input > img {
+  margin-left: 4px;
+}
+.button-input > span {
+  display: block;
+  width: 1px;
+  height: 35px;
+  margin: 7px;
+  background-color: rgba(173, 173, 173, 0.6);
+}
+.button-input > input {
+  border: none;
+  border-radius: 0%;
+  height: 35px;
+  width: 80%;
+}
+.button-input > input:focus,
+.button-input > input:hover,
+.button-input > input:active {
+  border: none !important;
+}
+
+/******************************************/
+/************** Step 2 and 3 **************/
+/******************************************/
+
+.location-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+}
+
+.location-group > .button-icon {
+  background: var(--primary-color);
+  border-radius: 4px;
+  padding: 10px;
+}
+
+.location-select {
+  width: 80vw;
+}
+
+@media only screen and (min-width: 500px) {
+  .location-select {
+    width: 100%;
+  }
+}
