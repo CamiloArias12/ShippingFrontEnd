@@ -43,6 +43,7 @@ yarn build
 
 ### Start Web Application
 ```bash
+cd packages/wev
 yarn dev
 ```
 
