@@ -20,7 +20,6 @@ ShippingFrontEnd/
 ## Requirements
 
 - Node.js 22
-- Docker
 
 ## Quick Start
 
