@@ -1,4 +1,5 @@
 import { DriverStatus } from "./enums";
+import { User } from "./user";
 export declare class Route {
     id?: number;
     name: string;
@@ -16,6 +17,7 @@ export type Driver = {
     license: string;
     vehicle_type: string;
     vehicle_capacity: number;
+    user?: User;
     status?: DriverStatus;
     created_at?: Date;
     updated_at?: Date;

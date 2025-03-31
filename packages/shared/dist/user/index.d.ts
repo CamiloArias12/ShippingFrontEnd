@@ -6,13 +6,13 @@ export declare const UserCreateReq: z.ZodObject<{
     email: z.ZodEffects<z.ZodString, string, string>;
     password: z.ZodEffects<z.ZodEffects<z.ZodEffects<z.ZodEffects<z.ZodString, string, string>, string, string>, string, string>, string, string>;
 }, "strip", z.ZodTypeAny, {
+    name: string;
     email: string;
     password: string;
-    name: string;
 }, {
+    name: string;
     email: string;
     password: string;
-    name: string;
 }>;
 export type UserCreateDto = z.infer<typeof UserCreateReq>;
 export type User = {

@@ -1,19 +1,22 @@
-import React from 'react';
+import { useState } from 'react'; // Add useState import
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { UserCreateDto, UserCreateReq } from '@shipping/shared/user';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { serviceCreate, serviceLogin } from '../api/auth';
-import { Box, Typography } from '@mui/material';
+import { serviceCreate } from '../api/auth';
+import { Box, Typography, Alert, Snackbar } from '@mui/material'; // Import Alert and Snackbar
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../store/hooks';
-import { loginFailure, loginStart, loginSuccess } from '../store/authSlice';
+import { toast } from 'sonner';
 
 export default function SingUp() {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate(); // Use the navigate hook
+  const [isLoading, setIsLoading] = useState(false); // Add loading state
+  const [error, setError] = useState<string | null>(null); // Add error state
 
   const { register, handleSubmit, formState: { errors } } = useForm<UserCreateDto>(
     {
@@ -21,19 +24,13 @@ export default function SingUp() {
     }
   );
 
-  const onSubmit: SubmitHandler<UserCreateDto> = async (data) => {
-    dispatch(loginStart());
-    try {
-      const user = await serviceLogin(data);
-      if (user) {
-        localStorage.setItem('token', user.token);
-        dispatch(loginSuccess(user.token));
-        window.location.href = '/dashboard';
-      } else {
-        dispatch(loginFailure(t('errors.login')));
-      }
-    } catch (err) {
-      dispatch(loginFailure(t('errors.login')));
+  const onSubmit = async (data:any) => {
+    const result = await serviceCreate(data);
+    if (result) {
+      toast.success(t('singup.success'));
+      navigate('/dashboard');
+    } else {
+      toast.error(t('singup.error'));
     }
   };
 
@@ -48,7 +45,6 @@ export default function SingUp() {
         flex: 1
       }}
     >
-      {/* Left side - SignUp form */}
       <Box
         flex={1}
         display="flex"
@@ -71,6 +67,12 @@ export default function SingUp() {
             {t('singup.title')}
           </Typography>
 
+          {error && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {error}
+            </Alert>
+          )}
+
           <Box
             component="form"
             onSubmit={handleSubmit(onSubmit)}
@@ -85,7 +87,7 @@ export default function SingUp() {
             />
             {errors.name && (
               <Typography color="error" fontSize="small">
-                {errors.name.message}
+                {t(`validation.name.${errors.name.type}`)}
               </Typography>
             )}
 
@@ -94,8 +96,8 @@ export default function SingUp() {
               props={{ ...register('email') }}
             />
             {errors.email && (
-              <Typography color="error" fontSize="small">]
-                {`validation.email.${errors.email.type}`}
+              <Typography color="error" fontSize="small"> {/* Fixed extra ] */}
+                {t(`validation.email.${errors.email.type}`)}
               </Typography>
             )}
 
@@ -106,12 +108,17 @@ export default function SingUp() {
             />
             {errors.password && (
               <Typography color="error" fontSize="small">
-                {`validation.password.${errors.password.type}`}
+                {t(`validation.password.${errors.password.type}`)}
               </Typography>
             )}
 
             <Box mt={2}>
-              <Button type="submit" label={t('singup.button')} variant="contained" />
+              <Button 
+                type="submit" 
+                label={isLoading ? t('common.loading', 'Loading...') : t('singup.button')} 
+                variant="contained" 
+                disabled={isLoading}
+              />
             </Box>
           </Box>
         </Box>
@@ -123,6 +130,7 @@ export default function SingUp() {
         position="relative"
         sx={{
           overflow: "hidden",
+          display: { xs: 'none', md: 'block' }, // Hide on mobile
           height: "100%"
         }}
       >
@@ -140,5 +148,5 @@ export default function SingUp() {
       </Box>
     </Box>
   );
-};
+}
 

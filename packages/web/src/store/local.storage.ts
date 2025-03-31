@@ -1,6 +1,7 @@
 const DEFAULT_TOKEN_KEY = 'token';
 
-export const saveToken = (token: string): void => {
+export const saveToken = async (token: string): Promise<void> => {
+    await Promise.resolve(); 
     localStorage.setItem(DEFAULT_TOKEN_KEY, token);
 };
 

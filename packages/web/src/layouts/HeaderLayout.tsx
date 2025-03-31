@@ -1,10 +1,8 @@
-import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
 import { Language } from '../components/Language';
 import { Box, Typography } from '@mui/material';
 
 export function HeaderLayout() {
-  const { t } = useTranslation();
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center" height="100vh" width="100vw">

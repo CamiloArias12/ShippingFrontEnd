@@ -11,7 +11,15 @@ export type CustomButtonProps = {
 
 export function CustomButton(props: CustomButtonProps) {
   return (
-    <Button  fullWidth variant={props.variant} disabled={props.disabled} href={props.href} onClick={props.onClick} type={props.type}>
+    <Button 
+      fullWidth 
+      variant={props.variant} 
+      disabled={props.disabled} 
+      href={props.href} 
+      onClick={props.onClick} 
+      type={props.type} 
+      style={{ height: '55px' }}
+    >
       {props.label}
     </Button>
   );

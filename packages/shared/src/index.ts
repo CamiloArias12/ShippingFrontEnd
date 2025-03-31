@@ -19,8 +19,8 @@ export type Driver= {
   license: string;
   vehicle_type: string;
   vehicle_capacity: number;
-  status?: DriverStatus;
   user?: User;
+  status?: DriverStatus;
   created_at?: Date;
   updated_at?: Date;
   deleted_at?: Date;

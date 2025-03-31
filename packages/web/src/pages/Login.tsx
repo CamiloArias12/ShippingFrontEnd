@@ -1,36 +1,45 @@
-import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
 import { AuthLoginReq, AuthLoginDto } from '@shipping/shared/auth';
-import { serviceLogin } from '../api/auth';
 import { Box, Typography } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { loginFailure, loginStart, loginSuccess } from '../store/authSlice';
+import { useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+
+import { loginUser } from '../store/authThunks';
+import { toast } from 'sonner';
 
 export default function Login() {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const { loading, error } = useAppSelector((state) => state.auth);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from?.pathname || '/dashboard';
+
+  const { loading, isAuthenticated } = useAppSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate(from, { replace: true });
+    }
+  }, [isAuthenticated, navigate, from]);
+
   const { register, handleSubmit, formState: { errors } } = useForm<AuthLoginDto>({
     resolver: zodResolver(AuthLoginReq),
   });
 
   const onSubmit: SubmitHandler<AuthLoginDto> = async (data) => {
-    dispatch(loginStart());
-    try {
-      const user = await serviceLogin(data);
-      if (user) {
-        localStorage.setItem('token', user.token);
-        dispatch(loginSuccess(user.token));
-        window.location.href = '/dashboard';
-      } else {
-        dispatch(loginFailure(t('errors.login')));
-      }
-    } catch (err) {
-      dispatch(loginFailure(t('errors.login')));
+    const result = await dispatch(loginUser(data.email, data.password));
+
+    if (result.success) {
+      toast.success(t('login.success'));
+      window.location.replace("/dashboard");
+    } else {
+      toast.error(t('login.error'));
     }
   };
 
@@ -99,11 +108,6 @@ export default function Login() {
             <Box mt={2}>
               <Button type="submit" disabled={loading} label={t('login.button')} variant="contained" />
             </Box>
-            {error && (
-              <Typography color="error" fontSize="small">
-                {error}
-              </Typography>
-            )}
           </Box>
         </Box>
       </Box>
