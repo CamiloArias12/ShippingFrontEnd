@@ -37,6 +37,7 @@ yarn install
 
 ### Build Shared Package
 ```bash
+cd packages/shared
 yarn build
 ```
 
